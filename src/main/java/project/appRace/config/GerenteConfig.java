@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import jakarta.transaction.Transactional;
@@ -12,6 +13,7 @@ import project.appRace.models.User.Role;
 import project.appRace.repositories.UserRepository;
 
 @Configuration
+@Profile("!test")
 public class GerenteConfig implements CommandLineRunner {
 
     private UserRepository repository;
