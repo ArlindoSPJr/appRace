@@ -1,5 +1,6 @@
 package project.appRace.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -32,5 +33,8 @@ public class Follow {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "followed_id", nullable = false)
     private User followed;
+
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive;
 
 }

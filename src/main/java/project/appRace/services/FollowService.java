@@ -13,32 +13,55 @@ import project.appRace.repositories.UserRepository;
 @Service
 @AllArgsConstructor
 public class FollowService {
-    
+
     private final FollowRepository followRepository;
     private final UserRepository userRepository;
 
     public FollowResponseDto followUser(FollowDto dto) {
-    if (dto.followerId().equals(dto.followedId())) {
-        throw new IllegalArgumentException("Um usuário não pode seguir a si mesmo.");
-    }
-    
-    if (followRepository.existsByFollowerIdAndFollowedId(dto.followerId(), dto.followedId())) {
-        throw new IllegalStateException("Você já está seguindo este usuário.");
-    }
-    
+        if (dto.followerId().equals(dto.followedId())) {
+            throw new IllegalArgumentException("Um usuário não pode seguir a si mesmo.");
+        }
 
-    User follower = userRepository.findById(dto.followerId())
-            .orElseThrow(() -> new RuntimeException("Usuário seguidor não encontrado"));
-            
-    User followed = userRepository.findById(dto.followedId())
-            .orElseThrow(() -> new RuntimeException("Usuário a ser seguido não encontrado"));
-    
-    Follow follow = new Follow();
-    follow.setFollower(follower);
-    follow.setFollowed(followed);
-    
-    followRepository.save(follow);
-    return new FollowResponseDto(follow);
-}
+        if (followRepository.existsByFollowerIdAndFollowedId(dto.followerId(), dto.followedId())) {
+            throw new IllegalStateException("Você já está seguindo este usuário.");
+        }
+
+        User follower = userRepository.findById(dto.followerId())
+                .orElseThrow(() -> new RuntimeException("Usuário seguidor não encontrado"));
+
+        User followed = userRepository.findById(dto.followedId())
+                .orElseThrow(() -> new RuntimeException("Usuário a ser seguido não encontrado"));
+
+        Follow follow = new Follow();
+        follow.setFollower(follower);
+        follow.setFollowed(followed);
+        follow.setActive(true);
+
+        followRepository.save(follow);
+        return new FollowResponseDto(follow);
+    }
+
+    public void unfollowUser(FollowDto dto) {
+        Follow follow = followRepository.findByFollowerIdAndFollowedId(dto.followerId(), dto.followedId())
+                .orElseThrow(() -> new IllegalStateException("Você não está seguindo este usuário."));
+
+        followRepository.delete(follow);
+    }
+
+    public void blockUser(FollowDto dto) {
+        Follow follow = followRepository.findByFollowerIdAndFollowedId(dto.followerId(), dto.followedId())
+                .orElseThrow(() -> new IllegalStateException("Você não está seguindo este usuário."));
+
+        follow.setActive(false);
+        followRepository.save(follow);
+    }
+
+    public void unblockUser(FollowDto dto) {
+        Follow follow = followRepository.findByFollowerIdAndFollowedId(dto.followerId(), dto.followedId())
+                .orElseThrow(() -> new IllegalStateException("Você não está seguindo este usuário."));
+
+        follow.setActive(true);
+        followRepository.save(follow);
+    }
 
 }
