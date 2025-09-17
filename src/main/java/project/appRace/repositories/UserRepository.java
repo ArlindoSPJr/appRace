@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import project.appRace.models.User;
 import project.appRace.models.User.Role;
 
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
@@ -23,4 +24,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
            //Page<UserResponseDto> findByRoles(@Param("role") Role role, Pageable pageable);
     Page<User> findByRoles(@Param("role") Role role, Pageable pageable);
     boolean existsByEmail(String email);
+    Optional<User> findById(Long id);
 }

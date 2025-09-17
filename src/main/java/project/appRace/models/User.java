@@ -37,7 +37,7 @@ public class User implements UserDetails {
 
     @JsonIgnore 
     @ToString.Exclude
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL, orphanRemoval = true)
     private java.util.List<Post> posts = new java.util.ArrayList<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
