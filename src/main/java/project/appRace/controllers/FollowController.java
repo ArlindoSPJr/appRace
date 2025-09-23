@@ -21,7 +21,7 @@ import project.appRace.services.FollowService;
 @RequestMapping("/api/follows")
 @RequiredArgsConstructor
 public class FollowController {
-    
+
     private final FollowService followService;
 
     @PostMapping()
@@ -30,9 +30,14 @@ public class FollowController {
         return ResponseEntity.status(201).body(response);
     }
 
-     @GetMapping("/{id}/following")
+    @GetMapping("/{id}/following")
     public List<UserResponseDto> getFollowing(@PathVariable Long id) {
         return followService.listarSeguindo(id);
+    }
+
+    @GetMapping("/{id}/followers")
+    public List<UserResponseDto> getFollowers(@PathVariable Long id) {
+        return followService.getFollowers(id);
     }
 
 }

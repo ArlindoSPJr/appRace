@@ -53,6 +53,15 @@ public class FollowService {
                 .toList();
     }
 
+    public List<UserResponseDto> getFollowers(Long userId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado com id: " + userId));
+        return followRepository.findFollowersByFollowedId(userId)
+                .stream()
+                .map(u -> new UserResponseDto(u))
+                .toList();
+    }
+
     public void unfollowUser(FollowDto dto) {
         Follow follow = followRepository.findByFollowerIdAndFollowedId(dto.followerId(), dto.followedId())
                 .orElseThrow(() -> new IllegalStateException("Você não está seguindo este usuário."));
