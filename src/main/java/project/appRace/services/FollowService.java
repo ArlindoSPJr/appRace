@@ -1,10 +1,13 @@
 package project.appRace.services;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
 import project.appRace.dto.follow.FollowDto;
 import project.appRace.dto.follow.FollowResponseDto;
+import project.appRace.dto.user.UserResponseDto;
 import project.appRace.models.Follow;
 import project.appRace.models.User;
 import project.appRace.repositories.FollowRepository;
@@ -39,6 +42,15 @@ public class FollowService {
 
         followRepository.save(follow);
         return new FollowResponseDto(follow);
+    }
+
+    public List<UserResponseDto> listarSeguindo(Long userId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado com id: " + userId));
+        return followRepository.findFollowingByFollowerId(userId)
+                .stream()
+                .map(u -> new UserResponseDto(u))
+                .toList();
     }
 
     public void unfollowUser(FollowDto dto) {
